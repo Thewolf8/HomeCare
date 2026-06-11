@@ -32,7 +32,6 @@ jobs:
           npx @capacitor/cli add android || true
           npx @capacitor/cli sync android
 
-      # تم تحديث الإصدار هنا إلى 21 لحل المشكلة تماماً
       - name: Setup JDK 21
         uses: actions/setup-java@v4
         with:
@@ -41,6 +40,18 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      # 🔥 خطوة الحل السحرية: حل تضارب إصدارات كوتلن وإجبارها على التوافق مع 1.8.22
+      - name: Fix Kotlin Duplicate Classes Conflict
+        run: |
+          echo "" >> android/app/build.gradle
+          echo "configurations.all {" >> android/app/build.gradle
+          echo "    resolutionStrategy {" >> android/app/build.gradle
+          echo "        force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'" >> android/app/build.gradle
+          echo "        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'" >> android/app/build.gradle
+          echo "        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'" >> android/app/build.gradle
+          echo "    }" >> android/app/build.gradle
+          echo "}" >> android/app/build.gradle
 
       - name: Grant execute permission for Gradle
         run: chmod +x android/gradlew
