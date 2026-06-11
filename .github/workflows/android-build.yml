@@ -26,12 +26,12 @@ jobs:
       - name: Build web app
         run: npm run build
 
-      # الخطوة المعدلة: تهيئة بيئة Capacitor لأندرويد بالكامل وتوليد المجلد إن لم يكن موجوداً
+      # تم التعديل هنا باستخدام الاسم الكامل للحزمة @capacitor/cli
       - name: Install Capacitor Android and Sync
         run: |
           npm install @capacitor/android
-          npx cap add android || true
-          npx cap sync android
+          npx @capacitor/cli add android || true
+          npx @capacitor/cli sync android
 
       - name: Setup JDK 17
         uses: actions/setup-java@v4
